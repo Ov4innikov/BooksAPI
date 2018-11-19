@@ -2,6 +2,7 @@ package ru.booksapi.restcontrollers;
 
 import java.util.*;
 
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import ru.booksapi.services.Response;
  * @author Eugene Ovchinnikov
  */
 @Controller
+@RequestMapping("/book")
+@Api(value="booksapi", description="Operations pertaining to books")
 public class BooksRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(BooksRestController.class);
