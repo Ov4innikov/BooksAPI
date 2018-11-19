@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.booksapi.entities.Book;
+import ru.booksapi.entities.Genre;
 import ru.booksapi.exceptions.RestException;
+import ru.booksapi.exceptions.ServiceExeption;
+import ru.booksapi.interfaces.BookService;
 import ru.booksapi.repostitories.BooksRepository;
 import ru.booksapi.services.Response;
 
@@ -31,22 +34,22 @@ public class BooksRestController {
     private Response response;
 
     @Autowired
-    private BooksRepository booksRepository;
+    private BookService bookService;
 
     @RequestMapping(value = "/getAllBooks", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> getAllBooks() throws RestException {
+        List<Book> listOfBooks = null;
         try{
-            List<Book> resultList = new ArrayList<Book>();
-            for(Book item:booksRepository.findAll()) {
-                resultList.add(item);
-                logger.debug("Book name is " + item.getName());
-            }
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("1","2");
-            return response.successResponse("");
+            listOfBooks = bookService.getAllBooks();
+            return response.successResponse(listOfBooks);
+        } catch (ServiceExeption serviceExeptione){
+            logger.error("Service error", serviceExeptione);
+            return response.errorResponse("ServiceError");
         } catch (Exception e) {
-            throw new RestException(e);
+            logger.error("Error", e);
+            return response.errorResponse("Error");
         }
     }
+
 }
