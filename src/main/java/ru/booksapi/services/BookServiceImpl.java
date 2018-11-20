@@ -92,16 +92,40 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public void updateBookById(Map<String,String> newBook) throws ServiceExeption {
+    public void updateBookById(Map<String,String> updatingBook) throws ServiceExeption {
         Book book = null;
-        logger.debug("updateBookById, id = " + Long.valueOf(newBook.get("id")) + "!!!");
-        if(booksRepository.findById(Long.valueOf(newBook.get("id"))).isPresent()) {
-            book = booksRepository.findById(Long.valueOf(newBook.get("id"))).get();
+        logger.debug("updateBookById, id = " + Long.valueOf(updatingBook.get("id")) + "!!!");
+        if(booksRepository.findById(Long.valueOf(updatingBook.get("id"))).isPresent()) {
+            book = booksRepository.findById(Long.valueOf(updatingBook.get("id"))).get();
         }else {
             throw new ServiceExeption("Book not found");
         }
-        Genre genre = genresRepository.findById(Long.valueOf(newBook.get("genreId"))).get();
-        Author author = authorsRepository.findById(Long.valueOf(newBook.get("authorId"))).get();
+        Genre genre = genresRepository.findById(Long.valueOf(updatingBook.get("genreId"))).get();
+        Author author = authorsRepository.findById(Long.valueOf(updatingBook.get("authorId"))).get();
+        book.setSeries(updatingBook.get("series"));
+        book.setName(updatingBook.get("name"));
+        book.setCountOfPage(Integer.valueOf(updatingBook.get("countOfPage")));
+        book.setDescription(updatingBook.get("description"));
+        book.setGenre(genre);
+        book.setAuthor(author);
+        booksRepository.save(book);
+    }
+
+    @Override
+    public void putNewBook(Map<String,String> newBook) throws ServiceExeption {
+        Book book = new Book();
+        Genre genre = null;
+        Author author = null;
+        if(genresRepository.findById(Long.valueOf(newBook.get("genreId"))).isPresent()) {
+            genre = genresRepository.findById(Long.valueOf(newBook.get("genreId"))).get();
+        }else {
+            throw new ServiceExeption("Genre not found");
+        }
+        if(authorsRepository.findById(Long.valueOf(newBook.get("authorId"))).isPresent()) {
+            author = authorsRepository.findById(Long.valueOf(newBook.get("authorId"))).get();
+        }else {
+            throw new ServiceExeption("Author not found");
+        }
         book.setSeries(newBook.get("series"));
         book.setName(newBook.get("name"));
         book.setCountOfPage(Integer.valueOf(newBook.get("countOfPage")));
@@ -109,6 +133,15 @@ public class BookServiceImpl implements BookService{
         book.setGenre(genre);
         book.setAuthor(author);
         booksRepository.save(book);
+    }
+
+    @Override
+    public void deleteBookById(Map<String, String> map) throws ServiceExeption {
+        if(map.isEmpty()) throw new ServiceExeption("Empty patameters");
+        if(map.get("id")==null) throw new ServiceExeption("Empty patameters");
+        String id = map.get("id");
+        booksRepository.deleteById(Long.valueOf(id));
+
     }
 
     //Method for adding a book

@@ -14,11 +14,11 @@ public class Book implements Serializable {
 
     private String series;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "AUTHOR_ID")
     private Author author;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "GENRE_ID")
     private Genre genre;
 

@@ -21,8 +21,7 @@ public interface BookService {
     public Map<Integer,Map<String,String>> getBooksByGenreId(Long genreId) throws ServiceExeption;
     public Map<Integer,Map<String,String>> getAllBooks() throws ServiceExeption;
     public void updateBookById(Map<String,String> map) throws ServiceExeption;
-
-
-
+    public void putNewBook(Map<String,String> map)  throws ServiceExeption;
+    public void deleteBookById(Map<String,String> map) throws ServiceExeption;
     public void createBook();//Method for adding a book
 }

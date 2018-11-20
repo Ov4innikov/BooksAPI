@@ -90,7 +90,7 @@ public class BooksRestController {
     @ApiOperation(value = "Get books by author id", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
-            @ApiResponse(code = 400, message = "Book not found"),
+            @ApiResponse(code = 400, message = "Books not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
     @RequestMapping(value = "/getBooksByAuthorId/{id}", method = RequestMethod.GET)
@@ -114,7 +114,7 @@ public class BooksRestController {
     @ApiOperation(value = "Get books by genre id", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
-            @ApiResponse(code = 400, message = "Book not found"),
+            @ApiResponse(code = 400, message = "Books not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
     @RequestMapping(value = "/getBooksByGenreId/{id}", method = RequestMethod.GET)
@@ -135,12 +135,65 @@ public class BooksRestController {
         }
     }
 
+    @ApiOperation(value = "Update book by id", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Book not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @RequestMapping(value = "/updateAuthorById", method = RequestMethod.POST)
     public @ResponseBody
     Map<String, Object> updateAuthorById(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
         try{
             bookService.updateBookById(newBook);
             logger.debug("GetId=" + newBook.get("id") + "; Series=" + newBook.get("series"));
+            return response.successResponse("OK");
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Put new book", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Book can,t be created"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/putNewBook", method = RequestMethod.PUT)
+    public @ResponseBody
+    Map<String, Object> putNewBook(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
+        try{
+            bookService.putNewBook(newBook);
+            logger.debug("GetId=" + newBook.get("id") + "; Series=" + newBook.get("series"));
+            return response.successResponse("OK");
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Delete book", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Book can,t be deleted"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/deleteBookById", method = RequestMethod.DELETE)
+    public @ResponseBody
+    Map<String, Object> deleteBookById(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
+        try{
+            bookService.deleteBookById(newBook);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
