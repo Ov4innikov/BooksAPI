@@ -141,12 +141,12 @@ public class BooksRestController {
             @ApiResponse(code = 400, message = "Book not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/updateAuthorById", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateBookById", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, Object> updateAuthorById(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
+    Map<String, Object> updateBookById(@RequestBody Map<String,String> updatedBook, HttpServletResponse responseHttp) {
         try{
-            bookService.updateBookById(newBook);
-            logger.debug("GetId=" + newBook.get("id") + "; Series=" + newBook.get("series"));
+            bookService.updateBookById(updatedBook);
+            logger.debug("GetId=" + updatedBook.get("id") + "; Series=" + updatedBook.get("series"));
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -191,9 +191,9 @@ public class BooksRestController {
     })
     @RequestMapping(value = "/deleteBookById", method = RequestMethod.DELETE)
     public @ResponseBody
-    Map<String, Object> deleteBookById(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
+    Map<String, Object> deleteBookById(@RequestBody Map<String,String> deletedBook, HttpServletResponse responseHttp) {
         try{
-            bookService.deleteBookById(newBook);
+            bookService.deleteBookById(deletedBook);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);

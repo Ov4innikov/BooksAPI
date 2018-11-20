@@ -1,5 +1,7 @@
 package ru.booksapi.entities;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,6 +12,7 @@ public class Author implements Serializable {
 
     @Id
     @GeneratedValue
+    @ApiModelProperty(notes = "The database generated author ID")
     private Long id;
 
     private String firstName;

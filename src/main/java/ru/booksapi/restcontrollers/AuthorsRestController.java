@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.AuthorService;
 import ru.booksapi.interfaces.BookService;
@@ -46,7 +44,7 @@ public class AuthorsRestController {
     })
     @RequestMapping(value = "/getAllAuthors", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getAllAuthor(HttpServletResponse responseHttp) {
+    Map<String, Object> getAllAuthors(HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
             resultMap = authorService.getAllAuthors();
@@ -55,6 +53,101 @@ public class AuthorsRestController {
             logger.error("Service error", serviceExeption);
             responseHttp.setStatus(400);
             return response.errorResponse("List is empty");
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Get a author by id", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Author not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/getAuthorById/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String, Object> getAuthorById(@PathVariable Long id, HttpServletResponse responseHttp) {
+        Map<Integer,Map<String,String>> resultMap = null;
+        try{
+            resultMap = authorService.getAuthorById(id);
+            return response.successResponse(resultMap);
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Update author by id", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Author not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/updateAuthorById", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, Object> updateAuthorById(@RequestBody Map<String,String> updatedAuthor, HttpServletResponse responseHttp) {
+        try{
+            authorService.updateAuthorById(updatedAuthor);
+            logger.debug("GetId=" + updatedAuthor.get("id") + "; Series=" + updatedAuthor.get("series"));
+            return response.successResponse("OK");
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Put new author", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Author can,t be created"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/putNewAuthor", method = RequestMethod.PUT)
+    public @ResponseBody
+    Map<String, Object> putNewAuthor(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
+        try{
+            authorService.putNewAuthor(newBook);
+            logger.debug("GetId=" + newBook.get("id") + "; Series=" + newBook.get("series"));
+            return response.successResponse("OK");
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Delete author", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Author can,t be deleted"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/deleteAuthorById", method = RequestMethod.DELETE)
+    public @ResponseBody
+    Map<String, Object> deleteAuthorById(@RequestBody Map<String,String> deletedBook, HttpServletResponse responseHttp) {
+        try{
+            authorService.deleteAuthorById(deletedBook);
+            return response.successResponse("OK");
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
         } catch (Exception e) {
             logger.error("Error", e);
             responseHttp.setStatus(500);
