@@ -1,17 +1,16 @@
 package ru.booksapi.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 
 @Entity
-public class Author {
+public class Author implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     private String firstName;
 
@@ -19,14 +18,14 @@ public class Author {
 
     private LocalDate dateOfBirthDay;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private Collection<Book> book;
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    private Collection<Book> books;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -54,11 +53,11 @@ public class Author {
         this.dateOfBirthDay = dateOfBirthDay;
     }
 
-    public Collection<Book> getBook() {
-        return book;
+    public Collection<Book> getBooks() {
+        return books;
     }
 
-    public void setBook(Collection<Book> book) {
-        this.book = book;
+    public void setBooks(Collection<Book> book) {
+        this.books = book;
     }
 }

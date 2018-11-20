@@ -5,6 +5,7 @@ import ru.booksapi.entities.Genre;
 import ru.booksapi.interfaces.GenreService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service of books genres
@@ -14,12 +15,12 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
     @Override
-    public Genre getGenreById() {
+    public Map<Integer,Map<String,String>> getGenreById(Long id) {
         return null;
     }
 
     @Override
-    public List<Genre> getAllGenres() {
+    public Map<Integer,Map<String,String>> getAllGenres() {
         return null;
     }
 }

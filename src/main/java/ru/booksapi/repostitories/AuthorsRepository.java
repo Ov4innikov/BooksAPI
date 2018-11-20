@@ -2,6 +2,7 @@ package ru.booksapi.repostitories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import ru.booksapi.entities.Author;
 import ru.booksapi.entities.Book;
 
 /**
@@ -10,6 +11,6 @@ import ru.booksapi.entities.Book;
  * @author Eugene Ovchinnikov
  */
 @Repository
-public interface AuthorsRepository extends CrudRepository<Book, Long> {
+public interface AuthorsRepository extends CrudRepository<Author, Long> {
 
 }

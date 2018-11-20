@@ -3,6 +3,7 @@ package ru.booksapi.interfaces;
 import ru.booksapi.entities.Author;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for service of books authors
@@ -11,6 +12,6 @@ import java.util.List;
  */
 public interface AuthorServce {
 
-    public Author getAuthorById();
-    public List<Author> getAllAuthors();
+    public Map<Integer,Map<String,String>> getAuthorById(Long id);
+    public Map<Integer,Map<String,String>> getAllAuthors();
 }

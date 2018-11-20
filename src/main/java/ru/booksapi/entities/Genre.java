@@ -1,27 +1,26 @@
 package ru.booksapi.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
-public class Genre {
+public class Genre implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     private String genre;
 
-    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genre", fetch = FetchType.EAGER)
     private Collection<Book> theBooks;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

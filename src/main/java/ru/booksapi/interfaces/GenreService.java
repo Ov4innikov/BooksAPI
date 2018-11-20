@@ -3,6 +3,7 @@ package ru.booksapi.interfaces;
 import ru.booksapi.entities.Genre;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for service of genres
@@ -11,6 +12,6 @@ import java.util.List;
  */
 public interface GenreService {
 
-    public Genre getGenreById();
-    public List<Genre> getAllGenres();
+    public Map<Integer,Map<String,String>> getGenreById(Long id);
+    public Map<Integer,Map<String,String>> getAllGenres();
 }

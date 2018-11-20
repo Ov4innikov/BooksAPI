@@ -5,6 +5,7 @@ import ru.booksapi.entities.Author;
 import ru.booksapi.interfaces.AuthorServce;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service of books authors
@@ -16,12 +17,12 @@ public class AuthorServiceImpl implements AuthorServce {
 
 
     @Override
-    public Author getAuthorById() {
+    public Map<Integer,Map<String,String>> getAuthorById(Long id) {
         return null;
     }
 
     @Override
-    public List<Author> getAllAuthors() {
+    public Map<Integer,Map<String,String>> getAllAuthors() {
         return null;
     }
 }

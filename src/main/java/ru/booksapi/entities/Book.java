@@ -7,7 +7,8 @@ import java.io.Serializable;
 public class Book implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     private String name;
 
@@ -25,11 +26,11 @@ public class Book implements Serializable {
 
     private String description;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

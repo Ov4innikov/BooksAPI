@@ -1,5 +1,6 @@
 package ru.booksapi.interfaces;
 
+import java.util.Map;
 import ru.booksapi.entities.Author;
 import ru.booksapi.entities.Book;
 import ru.booksapi.entities.Genre;
@@ -15,8 +16,13 @@ import java.util.List;
  */
 public interface BookService {
 
-    public Book getBookById();
-    public List<Book> getBooksByAuthor();
-    public List<Book> getBooksByGenre();
-    public List<Book> getAllBooks() throws ServiceExeption;
+    public Map<Integer,Map<String,String>> getBookById(Long id) throws ServiceExeption;
+    public Map<Integer,Map<String,String>> getBooksByAuthorId(Long authorId) throws ServiceExeption;
+    public Map<Integer,Map<String,String>> getBooksByGenreId(Long genreId) throws ServiceExeption;
+    public Map<Integer,Map<String,String>> getAllBooks() throws ServiceExeption;
+    public void updateBookById(Map<String,String> map) throws ServiceExeption;
+
+
+
+    public void createBook();//Method for adding a book
 }
