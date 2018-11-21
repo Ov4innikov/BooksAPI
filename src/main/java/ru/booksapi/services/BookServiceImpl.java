@@ -105,12 +105,21 @@ public class BookServiceImpl implements BookService{
             throw new ServiceExeption("Book not found");
         }
         if(updatingBook.get("genreId")!=null) {
-            genre = genresRepository.findById(Integer.valueOf(updatingBook.get("genreId"))).get();
-            book.setGenre(genre);
+
+            if(genresRepository.findById(Integer.valueOf(updatingBook.get("genreId"))).isPresent()) {
+                genre = genresRepository.findById(Integer.valueOf(updatingBook.get("genreId"))).get();
+                book.setGenre(genre);
+            }else {
+                throw new ServiceExeption("Genre not found");
+            }
         }
         if(updatingBook.get("authorId")!=null) {
-            author = authorsRepository.findById(Integer.valueOf(updatingBook.get("authorId"))).get();
-            book.setAuthor(author);
+            if(authorsRepository.findById(Integer.valueOf(updatingBook.get("authorId"))).isPresent()) {
+                author = authorsRepository.findById(Integer.valueOf(updatingBook.get("authorId"))).get();
+                book.setAuthor(author);
+            }else {
+                throw new ServiceExeption("Author not found");
+            }
         }
         if(updatingBook.get("series")!=null) {
             book.setSeries(updatingBook.get("series"));
@@ -135,6 +144,8 @@ public class BookServiceImpl implements BookService{
         Book book = new Book();
         Genre genre = null;
         Author author = null;
+        if(newBook.get("genreId")!=null)throw new ServiceExeption("GenreId is empty");
+        if(newBook.get("authorId")!=null)throw new ServiceExeption("AuthorId is empty");
         if(genresRepository.findById(Integer.valueOf(newBook.get("genreId"))).isPresent()) {
             genre = genresRepository.findById(Integer.valueOf(newBook.get("genreId"))).get();
         }else {

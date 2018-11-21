@@ -114,6 +114,8 @@ public class DesireServiceImpl implements DesireService {
             }else {
                 throw new ServiceExeption("Desire not found");
             }
+        }else {
+            throw new ServiceExeption("BookId is empty!");
         }
         desiresRepository.save(desire);
     }
