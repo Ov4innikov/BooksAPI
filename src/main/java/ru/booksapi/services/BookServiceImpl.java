@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.booksapi.entities.Author;
 import ru.booksapi.entities.Book;
+import ru.booksapi.entities.Desire;
 import ru.booksapi.entities.Genre;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.BookService;
 import ru.booksapi.repostitories.AuthorsRepository;
 import ru.booksapi.repostitories.BooksRepository;
+import ru.booksapi.repostitories.DesiresRepository;
 import ru.booksapi.repostitories.GenresRepository;
 
 import java.time.LocalDate;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Service of books books
+ * Service of booksapi books
  *
  * @author Eugene Ovchinnikov
  */
@@ -37,6 +39,9 @@ public class BookServiceImpl implements BookService{
 
     @Autowired
     private GenresRepository genresRepository;
+
+    @Autowired
+    private DesiresRepository desiresRepository;
 
     @Override
     public Map<Integer,Map<String,String>> getBookById(Integer id) throws ServiceExeption {
@@ -119,6 +124,9 @@ public class BookServiceImpl implements BookService{
         if(updatingBook.get("description")!=null) {
             book.setDescription(updatingBook.get("description"));
         }
+        if(updatingBook.get("cost")!=null) {
+            book.setCost(updatingBook.get("cost"));
+        }
         booksRepository.save(book);
     }
 
@@ -151,6 +159,9 @@ public class BookServiceImpl implements BookService{
         if(deletedBook.isEmpty()) throw new ServiceExeption("Empty patameters");
         if(deletedBook.get("id")==null) throw new ServiceExeption("Empty patameters");
         String id = deletedBook.get("id");
+        for(Desire item:desiresRepository.findAll()) {
+            if(item.getId()==Integer.valueOf(id)) throw new ServiceExeption("Some desire is link with this book!");
+        }
         if(genresRepository.findById(Integer.valueOf(deletedBook.get("id"))).isPresent()) {
             booksRepository.deleteById(Integer.valueOf(id));
         }else {
@@ -184,6 +195,7 @@ public class BookServiceImpl implements BookService{
     private Map<String,String> convertBookToMap(Book book){
         Map<String,String> resultMap = new HashMap<String,String>();
         resultMap.put("name",book.getName());
+        resultMap.put("name",book.getCost());
         resultMap.put("description",book.getDescription());
         resultMap.put("series",book.getSeries());
         resultMap.put("authorFirstName",book.getAuthor().getFirstName());

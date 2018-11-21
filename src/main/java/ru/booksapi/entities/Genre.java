@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * @author Eugene Ovchinnikov
+ */
 @Entity
 public class Genre implements Serializable {
 

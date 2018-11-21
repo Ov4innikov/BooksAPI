@@ -4,21 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.booksapi.entities.Author;
 import ru.booksapi.entities.Book;
 import ru.booksapi.entities.Genre;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.GenreService;
 import ru.booksapi.repostitories.BooksRepository;
 import ru.booksapi.repostitories.GenresRepository;
-
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Service of books genres
+ * Service of booksapi genres
  *
  * @author Eugene Ovchinnikov
  */

@@ -7,12 +7,14 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 
+/**
+ * @author Eugene Ovchinnikov
+ */
 @Entity
 public class Author implements Serializable {
 
     @Id
     @GeneratedValue
-    @ApiModelProperty(notes = "The database generated author ID")
     private Integer id;
 
     private String firstName;

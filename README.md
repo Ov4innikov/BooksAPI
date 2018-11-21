@@ -3,9 +3,10 @@
 Описание контроллеров можно найти в swagger-ui, для этого нужно перейти по ссылке localhost:{server.port}/swagger-ui.html#/
 
 Поля сущностей: для доступа к ним через REST:
-Book: id, name , series, countOfPage, discription, authorId, genreId;
+Book: id, name , series, countOfPage, discription, authorId, genreId, cost;
 Author: id, firstName, lastName, dateOfBirthDay(например "1999-10-10");
 Genre: id, genre;
+Desire: id, userId, bookId;
 
 Заполнение тела запросов при POST/PUT/DELETE, заполняется в json формате:
 При обновлении сущности(POST): обязательное поле - id, доступные поля - все остальные;

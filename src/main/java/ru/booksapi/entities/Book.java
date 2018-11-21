@@ -2,7 +2,11 @@ package ru.booksapi.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
+/**
+ * @author Eugene Ovchinnikov
+ */
 @Entity
 public class Book implements Serializable {
 
@@ -13,6 +17,8 @@ public class Book implements Serializable {
     private String name;
 
     private String series;
+
+    private  String cost;
 
     @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "AUTHOR_ID")
@@ -25,6 +31,9 @@ public class Book implements Serializable {
     private Integer countOfPage;
 
     private String description;
+
+    @OneToMany(mappedBy = "bookId", fetch = FetchType.EAGER)
+    private Collection<Book> users;
 
     public Integer getId() {
         return id;
@@ -80,5 +89,21 @@ public class Book implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    public Collection<Book> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<Book> users) {
+        this.users = users;
     }
 }
