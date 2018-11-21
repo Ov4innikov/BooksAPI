@@ -66,7 +66,7 @@ public class AuthorsRestController {
     })
     @RequestMapping(value = "/getAuthorById/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getAuthorById(@PathVariable Long id, HttpServletResponse responseHttp) {
+    Map<String, Object> getAuthorById(@PathVariable Integer id, HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
             resultMap = authorService.getAuthorById(id);
@@ -121,10 +121,9 @@ public class AuthorsRestController {
     })
     @RequestMapping(value = "/putNewAuthor", method = RequestMethod.PUT)
     public @ResponseBody
-    Map<String, Object> putNewAuthor(@RequestBody Map<String,String> newBook, HttpServletResponse responseHttp) {
+    Map<String, Object> putNewAuthor(@RequestBody Map<String,String> newAuthor, HttpServletResponse responseHttp) {
         try{
-            authorService.putNewAuthor(newBook);
-            logger.debug("GetId=" + newBook.get("id") + "; Series=" + newBook.get("series"));
+            authorService.putNewAuthor(newAuthor);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -145,9 +144,9 @@ public class AuthorsRestController {
     })
     @RequestMapping(value = "/deleteAuthorById", method = RequestMethod.DELETE)
     public @ResponseBody
-    Map<String, Object> deleteAuthorById(@RequestBody Map<String,String> deletedBook, HttpServletResponse responseHttp) {
+    Map<String, Object> deleteAuthorById(@RequestBody Map<String,String> deletedAuthor, HttpServletResponse responseHttp) {
         try{
-            authorService.deleteAuthorById(deletedBook);
+            authorService.deleteAuthorById(deletedAuthor);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);

@@ -11,6 +11,6 @@ import ru.booksapi.entities.Genre;
  * @author Eugene Ovchinnikov
  */
 @Repository
-public interface GenresRepository extends CrudRepository<Genre, Long> {
+public interface GenresRepository extends CrudRepository<Genre, Integer> {
 
 }

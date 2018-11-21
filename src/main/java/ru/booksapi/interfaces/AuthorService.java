@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface AuthorService {
 
-    public Map<Integer,Map<String,String>> getAuthorById(Long id) throws ServiceExeption;
+    public Map<Integer,Map<String,String>> getAuthorById(Integer id) throws ServiceExeption;
     public Map<Integer,Map<String,String>> getAllAuthors() throws ServiceExeption;
     public void updateAuthorById(Map<String,String> map) throws ServiceExeption;
     public void putNewAuthor(Map<String,String> map)  throws ServiceExeption;

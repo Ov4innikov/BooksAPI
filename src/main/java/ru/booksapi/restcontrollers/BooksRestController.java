@@ -67,7 +67,7 @@ public class BooksRestController {
     })
     @RequestMapping(value = "/getBookById/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getBooksById(@PathVariable Long id, HttpServletResponse responseHttp) {
+    Map<String, Object> getBooksById(@PathVariable Integer id, HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
             resultMap = bookService.getBookById(id);
@@ -91,7 +91,7 @@ public class BooksRestController {
     })
     @RequestMapping(value = "/getBooksByAuthorId/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getBooksByAuthorId(@PathVariable Long id, HttpServletResponse responseHttp) {
+    Map<String, Object> getBooksByAuthorId(@PathVariable Integer id, HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
             resultMap = bookService.getBooksByAuthorId(id);
@@ -115,7 +115,7 @@ public class BooksRestController {
     })
     @RequestMapping(value = "/getBooksByGenreId/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getBooksByGenreId(@PathVariable Long id, HttpServletResponse responseHttp) {
+    Map<String, Object> getBooksByGenreId(@PathVariable Integer id, HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
             resultMap = bookService.getBooksByGenreId(id);
@@ -221,10 +221,10 @@ public class BooksRestController {
     }
 
     //Method for adding a book
-    @RequestMapping(value = "/createBook", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/createBook", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> createBook(HttpServletResponse responseHttp) {
         bookService.createBook();
         return response.successResponse("Book created");
-    }
+    }*/
 }

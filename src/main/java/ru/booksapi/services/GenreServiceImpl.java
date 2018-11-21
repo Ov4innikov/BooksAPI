@@ -9,6 +9,7 @@ import ru.booksapi.entities.Book;
 import ru.booksapi.entities.Genre;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.GenreService;
+import ru.booksapi.repostitories.BooksRepository;
 import ru.booksapi.repostitories.GenresRepository;
 
 import java.time.LocalDate;
@@ -27,15 +28,18 @@ public class GenreServiceImpl implements GenreService {
     private static final Logger logger = LoggerFactory.getLogger(GenreServiceImpl.class);
 
     @Autowired
+    private BooksRepository booksRepository;
+
+    @Autowired
     private GenresRepository genresRepository;
 
     @Override
-    public Map<Integer,Map<String,String>> getGenreById(Long id) throws ServiceExeption {
+    public Map<Integer,Map<String,String>> getGenreById(Integer id) throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
         Genre genre = null;
         if(genresRepository.findById(id).isPresent()){
             genre = genresRepository.findById(id).get();
-            resultMap.put(1, convertGenreToMap(genre));
+            resultMap.put(id, convertGenreToMap(genre));
         }else {
             throw new ServiceExeption("Genre not found");
         }
@@ -46,9 +50,8 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Map<Integer,Map<String,String>> getAllGenres() throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
-        int i = 1;
         for(Genre item:genresRepository.findAll()) {
-            resultMap.put(i++, convertGenreToMap(item));
+            resultMap.put(item.getId(), convertGenreToMap(item));
             logger.debug("Author id is " + item.getId());
         }
         logger.debug("RESULT MAP" + resultMap.toString());
@@ -59,8 +62,8 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void updateGenreById(Map<String, String> updatingGenre) throws ServiceExeption {
         Genre genre = null;
-        if(genresRepository.findById(Long.valueOf(updatingGenre.get("id"))).isPresent()) {
-            genre = genresRepository.findById(Long.valueOf(updatingGenre.get("id"))).get();
+        if(genresRepository.findById(Integer.valueOf(updatingGenre.get("id"))).isPresent()) {
+            genre = genresRepository.findById(Integer.valueOf(updatingGenre.get("id"))).get();
         }else {
             throw new ServiceExeption("Genre not found");
         }
@@ -86,10 +89,15 @@ public class GenreServiceImpl implements GenreService {
         if(deletedGenre.isEmpty()) throw new ServiceExeption("Empty patameters");
         if(deletedGenre.get("id").isEmpty()) throw new ServiceExeption("Empty patameters");
         String id = deletedGenre.get("id");
-        for(Genre item:genresRepository.findAll()) {
-            if(item.getId()==Long.valueOf(id)) throw new ServiceExeption("Some book is link with this genre!");
+        for(Book item:booksRepository.findAll()) {
+            if(item.getId()==Integer.valueOf(id)) throw new ServiceExeption("Some book is link with this genre!");
         }
-        genresRepository.deleteById(Long.valueOf(id));
+        if(genresRepository.findById(Integer.valueOf(deletedGenre.get("id"))).isPresent()) {
+            genresRepository.deleteById(Integer.valueOf(id));
+        }else {
+            throw new ServiceExeption("Genre not found");
+        }
+
     }
 
     private Map<String,String> convertGenreToMap(Genre genre){

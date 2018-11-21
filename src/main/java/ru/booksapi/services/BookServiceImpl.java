@@ -39,12 +39,12 @@ public class BookServiceImpl implements BookService{
     private GenresRepository genresRepository;
 
     @Override
-    public Map<Integer,Map<String,String>> getBookById(Long id) throws ServiceExeption {
+    public Map<Integer,Map<String,String>> getBookById(Integer id) throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
         Book book = null;
         if(booksRepository.findById(id).isPresent()){
             book = booksRepository.findById(id).get();
-            resultMap.put(1, convertBookToMap(book));
+            resultMap.put(id, convertBookToMap(book));
         }else {
             throw new ServiceExeption("Book not found");
         }
@@ -54,24 +54,22 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Map<Integer,Map<String,String>> getBooksByAuthorId(Long authorId) throws ServiceExeption {
+    public Map<Integer,Map<String,String>> getBooksByAuthorId(Integer authorId) throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
         if(booksRepository.findAll().iterator().hasNext()==false) throw new ServiceExeption("Empty books map");
-        int i = 1;
         for(Book item:booksRepository.findAll()) {
-            if(item.getAuthor().getId() == authorId)resultMap.put(i++, convertBookToMap(item));
+            if(item.getAuthor().getId() == authorId)resultMap.put(item.getId(), convertBookToMap(item));
         }
         logger.debug("RESULT MAP" + resultMap.toString());
         return resultMap;
     }
 
     @Override
-    public Map<Integer,Map<String,String>> getBooksByGenreId(Long genreId) throws ServiceExeption {
+    public Map<Integer,Map<String,String>> getBooksByGenreId(Integer genreId) throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
         if(booksRepository.findAll().iterator().hasNext()==false) throw new ServiceExeption("Empty books map");
-        int i = 1;
         for(Book item:booksRepository.findAll()) {
-            if(item.getGenre().getId() == genreId)resultMap.put(i++, convertBookToMap(item));
+            if(item.getGenre().getId() == genreId)resultMap.put(item.getId(), convertBookToMap(item));
         }
         logger.debug("RESULT MAP" + resultMap.toString());
         return resultMap;
@@ -81,9 +79,8 @@ public class BookServiceImpl implements BookService{
     public Map<Integer,Map<String,String>> getAllBooks() throws ServiceExeption {
         logger.debug("Start method getAllBooks.");
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
-        int i = 1;
         for(Book item:booksRepository.findAll()) {
-            resultMap.put(i++, convertBookToMap(item));
+            resultMap.put(item.getId(), convertBookToMap(item));
             logger.debug("Book id is " + item.getId());
         }
         logger.debug("RESULT MAP" + resultMap.toString());
@@ -97,23 +94,23 @@ public class BookServiceImpl implements BookService{
         Genre genre = null;
         Author author = null;
         logger.debug("updateBookById, id = " + Long.valueOf(updatingBook.get("id")) + "!!!");
-        if(booksRepository.findById(Long.valueOf(updatingBook.get("id"))).isPresent()) {
-            book = booksRepository.findById(Long.valueOf(updatingBook.get("id"))).get();
+        if(booksRepository.findById(Integer.valueOf(updatingBook.get("id"))).isPresent()) {
+            book = booksRepository.findById(Integer.valueOf(updatingBook.get("id"))).get();
         }else {
             throw new ServiceExeption("Book not found");
         }
         if(updatingBook.get("genreId")!=null) {
-            genre = genresRepository.findById(Long.valueOf(updatingBook.get("genreId"))).get();
+            genre = genresRepository.findById(Integer.valueOf(updatingBook.get("genreId"))).get();
             book.setGenre(genre);
         }
         if(updatingBook.get("authorId")!=null) {
-            author = authorsRepository.findById(Long.valueOf(updatingBook.get("authorId"))).get();
+            author = authorsRepository.findById(Integer.valueOf(updatingBook.get("authorId"))).get();
             book.setAuthor(author);
         }
         if(updatingBook.get("series")!=null) {
             book.setSeries(updatingBook.get("series"));
         }
-        if(booksRepository.findById(Long.valueOf(updatingBook.get("name"))).isPresent()) {
+        if(booksRepository.findById(Integer.valueOf(updatingBook.get("name"))).isPresent()) {
             book.setName(updatingBook.get("name"));
         }
         if(updatingBook.get("countOfPage")!=null) {
@@ -130,13 +127,13 @@ public class BookServiceImpl implements BookService{
         Book book = new Book();
         Genre genre = null;
         Author author = null;
-        if(genresRepository.findById(Long.valueOf(newBook.get("genreId"))).isPresent()) {
-            genre = genresRepository.findById(Long.valueOf(newBook.get("genreId"))).get();
+        if(genresRepository.findById(Integer.valueOf(newBook.get("genreId"))).isPresent()) {
+            genre = genresRepository.findById(Integer.valueOf(newBook.get("genreId"))).get();
         }else {
             throw new ServiceExeption("Genre not found");
         }
-        if(authorsRepository.findById(Long.valueOf(newBook.get("authorId"))).isPresent()) {
-            author = authorsRepository.findById(Long.valueOf(newBook.get("authorId"))).get();
+        if(authorsRepository.findById(Integer.valueOf(newBook.get("authorId"))).isPresent()) {
+            author = authorsRepository.findById(Integer.valueOf(newBook.get("authorId"))).get();
         }else {
             throw new ServiceExeption("Author not found");
         }
@@ -150,11 +147,16 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public void deleteBookById(Map<String, String> map) throws ServiceExeption {
-        if(map.isEmpty()) throw new ServiceExeption("Empty patameters");
-        if(map.get("id")==null) throw new ServiceExeption("Empty patameters");
-        String id = map.get("id");
-        booksRepository.deleteById(Long.valueOf(id));
+    public void deleteBookById(Map<String, String> deletedBook) throws ServiceExeption {
+        if(deletedBook.isEmpty()) throw new ServiceExeption("Empty patameters");
+        if(deletedBook.get("id")==null) throw new ServiceExeption("Empty patameters");
+        String id = deletedBook.get("id");
+        if(genresRepository.findById(Integer.valueOf(deletedBook.get("id"))).isPresent()) {
+            booksRepository.deleteById(Integer.valueOf(id));
+        }else {
+            throw new ServiceExeption("Book not found");
+        }
+
 
     }
 

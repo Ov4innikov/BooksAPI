@@ -13,7 +13,7 @@ public class Author implements Serializable {
     @Id
     @GeneratedValue
     @ApiModelProperty(notes = "The database generated author ID")
-    private Long id;
+    private Integer id;
 
     private String firstName;
 
@@ -24,11 +24,11 @@ public class Author implements Serializable {
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private Collection<Book> books;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

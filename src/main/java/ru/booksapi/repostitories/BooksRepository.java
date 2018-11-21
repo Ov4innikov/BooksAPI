@@ -10,6 +10,6 @@ import ru.booksapi.entities.Book;
  * @author Eugene Ovchinnikov
  */
 @Repository
-public interface BooksRepository extends CrudRepository<Book, Long> {
+public interface BooksRepository extends CrudRepository<Book, Integer> {
 
 }

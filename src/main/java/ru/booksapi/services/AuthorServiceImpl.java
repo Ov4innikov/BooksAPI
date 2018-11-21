@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.booksapi.entities.Author;
+import ru.booksapi.entities.Book;
 import ru.booksapi.entities.Genre;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.AuthorService;
 import ru.booksapi.repostitories.AuthorsRepository;
+import ru.booksapi.repostitories.BooksRepository;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -25,15 +27,18 @@ public class AuthorServiceImpl implements AuthorService {
     private static final Logger logger = LoggerFactory.getLogger(AuthorServiceImpl.class);
 
     @Autowired
+    private BooksRepository booksRepository;
+
+    @Autowired
     private AuthorsRepository authorsRepository;
 
     @Override
-    public Map<Integer,Map<String,String>> getAuthorById(Long id) throws ServiceExeption {
+    public Map<Integer,Map<String,String>> getAuthorById(Integer id) throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
         Author author = null;
         if(authorsRepository.findById(id).isPresent()){
             author = authorsRepository.findById(id).get();
-            resultMap.put(1, convertAuthorToMap(author));
+            resultMap.put(id, convertAuthorToMap(author));
         }else {
             throw new ServiceExeption("Author not found");
         }
@@ -44,9 +49,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Map<Integer,Map<String,String>> getAllAuthors() throws ServiceExeption {
         Map<Integer,Map<String,String>> resultMap = new HashMap<Integer,Map<String,String>>();
-        int i = 1;
         for(Author item:authorsRepository.findAll()) {
-            resultMap.put(i++, convertAuthorToMap(item));
+            resultMap.put(item.getId(), convertAuthorToMap(item));
             logger.debug("Author id is " + item.getId());
         }
         logger.debug("RESULT MAP" + resultMap.toString());
@@ -57,8 +61,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void updateAuthorById(Map<String, String> updatingAuthor) throws ServiceExeption {
         Author author = null;
-        if(authorsRepository.findById(Long.valueOf(updatingAuthor.get("id"))).isPresent()) {
-            author = authorsRepository.findById(Long.valueOf(updatingAuthor.get("id"))).get();
+        if(authorsRepository.findById(Integer.valueOf(updatingAuthor.get("id"))).isPresent()) {
+            author = authorsRepository.findById(Integer.valueOf(updatingAuthor.get("id"))).get();
         }else {
             throw new ServiceExeption("Author not found");
         }
@@ -89,10 +93,16 @@ public class AuthorServiceImpl implements AuthorService {
         if(deletedAuthor.isEmpty()) throw new ServiceExeption("Empty patameters");
         if(deletedAuthor.get("id").isEmpty()) throw new ServiceExeption("Empty patameters");
         String id = deletedAuthor.get("id");
-        for(Author item:authorsRepository.findAll()) {
-            if(item.getId()==Long.valueOf(id)) throw new ServiceExeption("Some book is link with this author!");
+        for(Book item:booksRepository.findAll()) {
+            if(item.getId()==Integer.valueOf(id)) throw new ServiceExeption("Some book is link with this author!");
         }
-        authorsRepository.deleteById(Long.valueOf(id));
+        if(authorsRepository.findById(Integer.valueOf(deletedAuthor.get("id"))).isPresent()) {
+            authorsRepository.deleteById(Integer.valueOf(id));
+        }else {
+            throw new ServiceExeption("Author not found");
+        }
+
+
     }
 
     private Map<String,String> convertAuthorToMap(Author author){
