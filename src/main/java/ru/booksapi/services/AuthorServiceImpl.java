@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.booksapi.entities.Author;
+import ru.booksapi.entities.Genre;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.AuthorService;
 import ru.booksapi.repostitories.AuthorsRepository;
@@ -61,27 +62,36 @@ public class AuthorServiceImpl implements AuthorService {
         }else {
             throw new ServiceExeption("Author not found");
         }
-        author.setDateOfBirthDay(LocalDate.parse(updatingAuthor.get("name")));
-        author.setFirstName(updatingAuthor.get("name"));
-        author.setLastName(updatingAuthor.get("name"));
+        if(updatingAuthor.get("dateOfBirthDay")!=null) {
+            author.setDateOfBirthDay(LocalDate.parse(updatingAuthor.get("dateOfBirthDay")));
+        }
+        if(updatingAuthor.get("firstName")!=null) {
+            author.setFirstName(updatingAuthor.get("firstName"));
+        }
+        if(updatingAuthor.get("lastName")!=null) {
+            author.setLastName(updatingAuthor.get("lastName"));
+        }
+        authorsRepository.save(author);
     }
 
     @Override
     public void putNewAuthor(Map<String, String> newAuthor) throws ServiceExeption {
         Author author = new Author();
-        if(authorsRepository.findById(Long.valueOf(newAuthor.get("authorId"))).isPresent()) {
-            throw new ServiceExeption("Author was created");
-        }
-        author.setDateOfBirthDay(LocalDate.parse(newAuthor.get("name")));
-        author.setFirstName(newAuthor.get("name"));
-        author.setLastName(newAuthor.get("name"));
+
+        author.setDateOfBirthDay(LocalDate.parse(newAuthor.get("dateOfBirthDay")));
+        author.setFirstName(newAuthor.get("firstName"));
+        author.setLastName(newAuthor.get("lastName"));
+        authorsRepository.save(author);
     }
 
     @Override
-    public void deleteAuthorById(Map<String, String> map) throws ServiceExeption {
-        if(map.isEmpty()) throw new ServiceExeption("Empty patameters");
-        if(map.get("id")==null) throw new ServiceExeption("Empty patameters");
-        String id = map.get("id");
+    public void deleteAuthorById(Map<String, String> deletedAuthor) throws ServiceExeption {
+        if(deletedAuthor.isEmpty()) throw new ServiceExeption("Empty patameters");
+        if(deletedAuthor.get("id").isEmpty()) throw new ServiceExeption("Empty patameters");
+        String id = deletedAuthor.get("id");
+        for(Author item:authorsRepository.findAll()) {
+            if(item.getId()==Long.valueOf(id)) throw new ServiceExeption("Some book is link with this author!");
+        }
         authorsRepository.deleteById(Long.valueOf(id));
     }
 

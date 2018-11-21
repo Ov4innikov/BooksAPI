@@ -94,20 +94,34 @@ public class BookServiceImpl implements BookService{
     @Override
     public void updateBookById(Map<String,String> updatingBook) throws ServiceExeption {
         Book book = null;
+        Genre genre = null;
+        Author author = null;
         logger.debug("updateBookById, id = " + Long.valueOf(updatingBook.get("id")) + "!!!");
         if(booksRepository.findById(Long.valueOf(updatingBook.get("id"))).isPresent()) {
             book = booksRepository.findById(Long.valueOf(updatingBook.get("id"))).get();
         }else {
             throw new ServiceExeption("Book not found");
         }
-        Genre genre = genresRepository.findById(Long.valueOf(updatingBook.get("genreId"))).get();
-        Author author = authorsRepository.findById(Long.valueOf(updatingBook.get("authorId"))).get();
-        book.setSeries(updatingBook.get("series"));
-        book.setName(updatingBook.get("name"));
-        book.setCountOfPage(Integer.valueOf(updatingBook.get("countOfPage")));
-        book.setDescription(updatingBook.get("description"));
-        book.setGenre(genre);
-        book.setAuthor(author);
+        if(updatingBook.get("genreId")!=null) {
+            genre = genresRepository.findById(Long.valueOf(updatingBook.get("genreId"))).get();
+            book.setGenre(genre);
+        }
+        if(updatingBook.get("authorId")!=null) {
+            author = authorsRepository.findById(Long.valueOf(updatingBook.get("authorId"))).get();
+            book.setAuthor(author);
+        }
+        if(updatingBook.get("series")!=null) {
+            book.setSeries(updatingBook.get("series"));
+        }
+        if(booksRepository.findById(Long.valueOf(updatingBook.get("name"))).isPresent()) {
+            book.setName(updatingBook.get("name"));
+        }
+        if(updatingBook.get("countOfPage")!=null) {
+            book.setCountOfPage(Integer.valueOf(updatingBook.get("countOfPage")));
+        }
+        if(updatingBook.get("description")!=null) {
+            book.setDescription(updatingBook.get("description"));
+        }
         booksRepository.save(book);
     }
 

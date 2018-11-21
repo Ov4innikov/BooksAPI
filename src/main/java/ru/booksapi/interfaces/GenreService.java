@@ -14,7 +14,7 @@ import java.util.Map;
 public interface GenreService {
 
     public Map<Integer,Map<String,String>> getGenreById(Long id) throws ServiceExeption;
-    public Map<Integer,Map<String,String>> getAllGenres();
+    public Map<Integer,Map<String,String>> getAllGenres() throws ServiceExeption;
     public void updateGenreById(Map<String,String> map) throws ServiceExeption;
     public void putNewGenre(Map<String,String> map)  throws ServiceExeption;
     public void deleteGenreById(Map<String,String> map) throws ServiceExeption;

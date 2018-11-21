@@ -11,12 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.booksapi.entities.Book;
-import ru.booksapi.entities.Genre;
-import ru.booksapi.exceptions.RestException;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.BookService;
-import ru.booksapi.repostitories.BooksRepository;
 import ru.booksapi.services.Response;
 
 import javax.servlet.http.HttpServletResponse;
@@ -135,7 +131,16 @@ public class BooksRestController {
         }
     }
 
-    @ApiOperation(value = "Update book by id", response = Map.class)
+    @ApiOperation(value = "Update book by id, example of request body: \n " +
+            "{\n" +
+            "\t\"id\":\"1\",\n" +
+            "\t\"name\":\"Test\",\n" +
+            "\t\"series\":\"Series test\",\n" +
+            "\t\"countOfPage\":\"100\",\n" +
+            "\t\"description\":\"Test description\",\n" +
+            "\t\"authorId\":2,\n" +
+            "\t\"genreId\":3\n" +
+            "}", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Book not found"),
@@ -159,7 +164,14 @@ public class BooksRestController {
         }
     }
 
-    @ApiOperation(value = "Put new book", response = Map.class)
+    @ApiOperation(value = "Put new book, example of request body: \n {\n" +
+            "\t\"name\":\"TestPut\",\n" +
+            "\t\"series\":\"Put test\",\n" +
+            "\t\"countOfPage\":23,\n" +
+            "\t\"description\":\"Test put\",\n" +
+            "\t\"authorId\":1,\n" +
+            "\t\"genreId\":1\n" +
+            "}", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Book can,t be created"),
@@ -183,7 +195,9 @@ public class BooksRestController {
         }
     }
 
-    @ApiOperation(value = "Delete book", response = Map.class)
+    @ApiOperation(value = "Delete book, example of request body: \n{\n" +
+            "\t\"id\":\"6\",\n" +
+            "}", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Book can,t be deleted"),

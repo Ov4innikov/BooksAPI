@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.booksapi.exceptions.ServiceExeption;
 import ru.booksapi.interfaces.AuthorService;
-import ru.booksapi.interfaces.BookService;
-import ru.booksapi.services.AuthorServiceImpl;
 import ru.booksapi.services.Response;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/author")
-@Api(value="authorapi", description="Operations pertaining to authors")
+@Api(value="authorsapi", description="Operations pertaining to authors")
 public class AuthorsRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorsRestController.class);
@@ -84,7 +82,10 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Update author by id", response = Map.class)
+    @ApiOperation(value = "Update author by id, example of request body: \n {\n" +
+            "\t\"id\":3,\n" +
+            "\t\"firstName\":\" Test John\"\n" +
+            "}", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Author not found"),
@@ -108,7 +109,11 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Put new author", response = Map.class)
+    @ApiOperation(value = "Put new author, example of request body: \n {\n" +
+            "\t\"dateOfBirthDay\":\"1999-10-10\",\n" +
+            "\t\"firstName\":\"John\",\n" +
+            "\t\"lastName\":\"WiFi\"\n" +
+            "}", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Author can,t be created"),
@@ -132,7 +137,7 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Delete author", response = Map.class)
+    @ApiOperation(value = "Delete author, example of request body: ", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Author can,t be deleted"),
