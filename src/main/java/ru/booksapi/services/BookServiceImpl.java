@@ -149,6 +149,7 @@ public class BookServiceImpl implements BookService{
         book.setName(newBook.get("name"));
         book.setCountOfPage(Integer.valueOf(newBook.get("countOfPage")));
         book.setDescription(newBook.get("description"));
+        book.setCost(newBook.get("cost"));
         book.setGenre(genre);
         book.setAuthor(author);
         booksRepository.save(book);

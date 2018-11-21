@@ -10,42 +10,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.booksapi.exceptions.ServiceExeption;
-import ru.booksapi.interfaces.AuthorService;
+import ru.booksapi.interfaces.DesireService;
+import ru.booksapi.services.DesireServiceImpl;
 import ru.booksapi.services.Response;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * Contoller for operation with entity author: GET/POST/PUT/DELETE
+ * Contoller for operation with entity desire: GET/POST/PUT/DELETE
  *
  * @author Eugene Ovchinnikov
  */
 @Controller
-@RequestMapping("/author")
-@Api(value="authorsapi", description="Operations pertaining to authors")
-public class AuthorsRestController {
+@RequestMapping("/desire")
+@Api(value="desiresapi", description="Operations pertaining to desires")
+public class DesireRestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthorsRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DesireRestController.class);
 
     @Autowired
     private Response response;
 
     @Autowired
-    private AuthorService authorService;
+    private DesireService desireService;
 
-    @ApiOperation(value = "Get a list of all authors", response = Map.class)
+    @ApiOperation(value = "Get a list of all genres", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "List is empty"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/getAllAuthors", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllGenres", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getAllAuthors(HttpServletResponse responseHttp) {
+    Map<String, Object> getAllGenres(HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
-            resultMap = authorService.getAllAuthors();
+            resultMap = desireService.getAllDesires();
             return response.successResponse(resultMap);
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -58,18 +59,18 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Get a author by id", response = Map.class)
+    @ApiOperation(value = "Get a desire by id", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
-            @ApiResponse(code = 400, message = "Author not found"),
+            @ApiResponse(code = 400, message = "Desire not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/getAuthorById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getDesireById/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getAuthorById(@PathVariable Integer id, HttpServletResponse responseHttp) {
+    Map<String, Object> getDesireById(@PathVariable Integer id, HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
-            resultMap = authorService.getAuthorById(id);
+            resultMap = desireService.getDesireById(id);
             return response.successResponse(resultMap);
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -82,20 +83,41 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Update author by id, example of request body: \n {\n" +
-            "\t\"id\":3,\n" +
-            "\t\"firstName\":\" Test John\"\n" +
-            "}", response = Map.class)
+    @ApiOperation(value = "Get a desire by userId", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
-            @ApiResponse(code = 400, message = "Author not found"),
+            @ApiResponse(code = 400, message = "Desire not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/updateAuthorById", method = RequestMethod.POST)
+    @RequestMapping(value = "/getDesiresByUserId/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> updateAuthorById(@RequestBody Map<String,String> updatedAuthor, HttpServletResponse responseHttp) {
+    Map<String, Object> getDesiresByUserId(@PathVariable Integer id, HttpServletResponse responseHttp) {
+        Map<Integer,Map<String,String>> resultMap = null;
         try{
-            authorService.updateAuthorById(updatedAuthor);
+            resultMap = desireService.getDesiresByUserId("");
+            return response.successResponse(resultMap);
+        } catch (ServiceExeption serviceExeption){
+            logger.error("Service error", serviceExeption);
+            responseHttp.setStatus(400);
+            return response.errorResponse(serviceExeption.getMessage());
+        } catch (Exception e) {
+            logger.error("Error", e);
+            responseHttp.setStatus(500);
+            return response.errorResponse("Error");
+        }
+    }
+
+    @ApiOperation(value = "Update desire by id, example of request body: \n ", response = Map.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully operations"),
+            @ApiResponse(code = 400, message = "Desire not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @RequestMapping(value = "/updateDesireById", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, Object> updateDesireById(@RequestBody Map<String,String> updatedDesire, HttpServletResponse responseHttp) {
+        try{
+            desireService.updateDesireById(updatedDesire);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -108,21 +130,17 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Put new author, example of request body: \n {\n" +
-            "\t\"dateOfBirthDay\":\"1999-10-10\",\n" +
-            "\t\"firstName\":\"John\",\n" +
-            "\t\"lastName\":\"WiFi\"\n" +
-            "}", response = Map.class)
+    @ApiOperation(value = "Put new desire, example of request body: ", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
-            @ApiResponse(code = 400, message = "Author can,t be created"),
+            @ApiResponse(code = 400, message = "Desire can,t be created"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/putNewAuthor", method = RequestMethod.PUT)
+    @RequestMapping(value = "/putNewDesire", method = RequestMethod.PUT)
     public @ResponseBody
-    Map<String, Object> putNewAuthor(@RequestBody Map<String,String> newAuthor, HttpServletResponse responseHttp) {
+    Map<String, Object> putNewDesire(@RequestBody Map<String,String> newDesire, HttpServletResponse responseHttp) {
         try{
-            authorService.putNewAuthor(newAuthor);
+            desireService.putNewDesire(newDesire);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -135,19 +153,17 @@ public class AuthorsRestController {
         }
     }
 
-    @ApiOperation(value = "Delete author, example of request body: {\n" +
-            "\t\"id\":3\n" +
-            "}", response = Map.class)
+    @ApiOperation(value = "Delete desire, example of request body: ", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Author can,t be deleted"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/deleteAuthorById", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteDesireById", method = RequestMethod.DELETE)
     public @ResponseBody
-    Map<String, Object> deleteAuthorById(@RequestBody Map<String,String> deletedAuthor, HttpServletResponse responseHttp) {
+    Map<String, Object> deleteDesireById(@RequestBody Map<String,String> deletedDesire, HttpServletResponse responseHttp) {
         try{
-            authorService.deleteAuthorById(deletedAuthor);
+            desireService.deleteDesireById(deletedDesire);
             return response.successResponse("OK");
         } catch (ServiceExeption serviceExeption){
             logger.error("Service error", serviceExeption);
@@ -159,4 +175,11 @@ public class AuthorsRestController {
             return response.errorResponse("Error");
         }
     }
+    //Method for adding a desire
+    /*@RequestMapping(value = "/createDesire", method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String, Object> createBook(HttpServletResponse responseHttp) {
+        ((DesireServiceImpl) desireService).createDesire();
+        return response.successResponse("Desire created");
+    }*/
 }

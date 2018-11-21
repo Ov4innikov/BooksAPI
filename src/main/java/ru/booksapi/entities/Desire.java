@@ -17,7 +17,7 @@ public class Desire implements Serializable {
 
     @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "BOOK_ID")
-    private Integer bookId;
+    private Book book;
 
     public Integer getId() {
         return id;
@@ -35,11 +35,11 @@ public class Desire implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

@@ -32,8 +32,8 @@ public class Book implements Serializable {
 
     private String description;
 
-    @OneToMany(mappedBy = "bookId", fetch = FetchType.EAGER)
-    private Collection<Book> users;
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    private Collection<Desire> desires;
 
     public Integer getId() {
         return id;
@@ -99,11 +99,11 @@ public class Book implements Serializable {
         this.cost = cost;
     }
 
-    public Collection<Book> getUsers() {
-        return users;
+    public Collection<Desire> getDesires() {
+        return desires;
     }
 
-    public void setUsers(Collection<Book> users) {
-        this.users = users;
+    public void setDesires(Collection<Desire> desires) {
+        this.desires = desires;
     }
 }
