@@ -35,15 +35,15 @@ public class DesireRestController {
     @Autowired
     private DesireService desireService;
 
-    @ApiOperation(value = "Get a list of all genres", response = Map.class)
+    @ApiOperation(value = "Get a list of all desires", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "List is empty"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @RequestMapping(value = "/getAllGenres", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllDesires", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> getAllGenres(HttpServletResponse responseHttp) {
+    Map<String, Object> getAllDesires(HttpServletResponse responseHttp) {
         Map<Integer,Map<String,String>> resultMap = null;
         try{
             resultMap = desireService.getAllDesires();
@@ -130,7 +130,10 @@ public class DesireRestController {
         }
     }
 
-    @ApiOperation(value = "Put new desire, example of request body: ", response = Map.class)
+    @ApiOperation(value = "Put new desire, example of request body: {\n" +
+            "\t\"userId\": \"User id\",\n" +
+            "\t\"bookId\": \"14\"\n" +
+            "}", response = Map.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully operations"),
             @ApiResponse(code = 400, message = "Desire can,t be created"),
