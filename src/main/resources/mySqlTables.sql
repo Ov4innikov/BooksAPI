@@ -42,3 +42,17 @@ CREATE TABLE `genre` (
 LOCK TABLES `genre` WRITE;
 INSERT INTO `genre` VALUES ('3','Genre'),('1','Horror'),('2','Action');
 UNLOCK TABLES;
+
+---------------
+-- Table desire
+DROP TABLE IF EXISTS `desire`;
+CREATE TABLE `desire` (
+  `id` int(11) NOT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
+  `book_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKc3p5y0joranvq9mq40kwi29q0` (`book_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+LOCK TABLES `desire` WRITE;
+INSERT INTO `desire` VALUES (19,'User id',3);
+UNLOCK TABLES;
