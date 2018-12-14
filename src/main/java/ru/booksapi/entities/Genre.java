@@ -42,5 +42,6 @@ public class Genre implements Serializable {
     public void setTheBooks(Collection<Book> theBooks) {
         this.theBooks = theBooks;
     }
-    //
+    // wolf 5b:3c:6b:9f:b3:23:75:b6:82:49:16:c9:cd:4f:b6:62
+    // ovch 07:6e:28:79:4c:32:96:c5:f0:dc:02:46:1c:f8:80:5e
 }

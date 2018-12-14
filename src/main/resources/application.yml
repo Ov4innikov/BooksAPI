@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://10.40.107.97:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: sys
-    password: ElchBWelnrMdhulyPDDP
+    username:
+    password:
 
   jpa:
     show-sql: true
